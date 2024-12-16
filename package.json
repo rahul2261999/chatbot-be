@@ -1,0 +1,44 @@
+{
+  "name": "llm_application",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "circular": "madge --extensions ts --ts-config ./tsconfig.json --circular .",
+    "prebuild": "npm run circular && rm -rf ./build",
+    "build": "tsc",
+    "watch": "tsc-watch --noClear -p tsconfig.json --onSuccess \"node build\"",
+    "dev": "npm run prebuild && npm run build && npm run watch",
+    "watch:cli": "tsc-watch --noClear --onSuccess \"node build/terminal.js interactive\"",
+    "dev:cli": "npm run prebuild && npm run build && npm run watch:cli"
+  },
+  "author": "Rahul Saini",
+  "license": "ISC",
+  "dependencies": {
+    "@langchain/community": "^0.3.18",
+    "@langchain/core": "^0.3.23",
+    "@langchain/langgraph": "^0.2.20",
+    "@langchain/mistralai": "^0.1.1",
+    "@langchain/mongodb": "^0.1.0",
+    "@langchain/redis": "^0.1.0",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "inquirer": "^12.2.0",
+    "langchain": "^0.3.5",
+    "mongodb": "^6.12.0",
+    "pdf-parse": "^1.1.1",
+    "redis": "^4.7.0",
+    "socket.io": "^4.8.1",
+    "typescript": "^5.7.2",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "cors": "^2.8.5",
+    "madge": "^8.0.0",
+    "socket.io-logger": "^0.0.2",
+    "tsc-watch": "^6.2.1"
+  }
+}
