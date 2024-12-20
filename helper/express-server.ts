@@ -4,11 +4,12 @@ import * as http from 'http';
 import * as cors from 'cors'
 import Io from '../socket/io';
 import rag from '../llm/rag/rag';
+import constant from '../constants/constant';
 
 class ExpressServer {
   private static instance: ExpressServer;
   private app: express.Express;
-  private port: number = 3000;
+  private port: number = constant.app.port;
   private httpServer: http.Server;
   private io?: Io;
 

@@ -2,8 +2,7 @@ import { Server, Socket } from "socket.io";
 import SocketClient from "./SocketClient";
 import { NextFunction } from "express";
 import { ISocket } from "./socket.interface";
-// @ts-ignore
-const socketLogger = require('socket.io-logger')()
+import constant from "../constants/constant";
 
 class Io {
   private static instance: Io;
@@ -60,8 +59,17 @@ class Io {
       const token = socket.handshake.auth['token']
         || socket.handshake.headers['token'];
 
+
       if (!token) {
-        throw new Error('Invalid access token');
+        console.error('access token not found');
+        throw new Error('access token not found');
+      }
+
+
+      if (token && token !== constant.socket.authKey) {
+        console.error("unauthorized access token");
+
+        throw new Error("unauthorized access token")
       }
 
       socket.configuration = {
