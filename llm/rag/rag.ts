@@ -7,6 +7,7 @@ import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts
 import chatMistralAIModel from "../ai_models/mistral";
 import { StringOutputParser } from "@langchain/core/output_parsers";
 import { InMemoryChatMessageHistory } from "@langchain/core/chat_history";
+import { AIMessage } from "@langchain/core/messages";
 
 class Rag {
   private static instance: Rag;
@@ -29,70 +30,68 @@ class Rag {
 
   public async askQuestion(question: string): Promise<string> {
     try {
-      console.info("executing askQuestion")
+      console.info("Executing askQuestion");
 
+      this.sessionHistory.addMessages([
+        new AIMessage("Psoriasis is a chronic autoimmune condition that causes skin cells to multiply up to 10 times faster than normal, leading to thick, scaly patches.")
+      ])
+
+      // Retrieve context from documents
       const documentRetrivalChain = RunnableSequence.from([
         (input) => input.question,
         this.retriver,
-        DocumentLoader.convertDocsToString
+        DocumentLoader.convertDocsToString,
       ]);
 
       const CHAT_COMPLETION_TEMPLATE = `
       You are an intelligent assistant. Answer the question as accurately as possible using the provided context and chat history in 30 words. 
-      If the context does not provide enough information, say "The context does not provide enough information to answer this question."
+      If the context and history does not provide enough information, say "The context does not provide enough information to answer this question."
       Context:
       {context}
 
-      Question:
-      {question}
+      `;
 
-      Answer:
-    `
-
+      // Create prompt template for generating answers
       const answerGenerationPrompt = ChatPromptTemplate.fromMessages([
         ["system", CHAT_COMPLETION_TEMPLATE],
         new MessagesPlaceholder("history"),
+        ["human", "{question}"]
       ]);
 
-      // answerGenerationPrompt.formatMessages({
-
-      // })
-
+      // Chain for answering questions
       const answerCompletionChain = RunnableSequence.from([
         {
-          question: (input: any) => {
-            return input.question
-          },
+          question: (input) => input.question,
           context: documentRetrivalChain,
-          history: (input: any) => input.history || [],
+          history: (input) => input.history || [],
         },
         answerGenerationPrompt,
         chatMistralAIModel,
-        new StringOutputParser()
+        new StringOutputParser(),
       ]);
 
-
+      // Chat runnable with history management
       const runnableWithChatHistory = new RunnableWithMessageHistory({
         runnable: answerCompletionChain,
-        getMessageHistory: (_sessionId) => this.sessionHistory,
+        getMessageHistory: () => this.sessionHistory,
         historyMessagesKey: 'history',
         inputMessagesKey: 'question',
-      })
+      });
 
+      // Invoke the chain
       const answer = await runnableWithChatHistory.invoke(
         { question },
         {
-          configurable: { sessionId: "123" }
+          configurable: { sessionId: "123" },
         }
       );
 
-      console.info("exection complete askQuestion")
+      console.info("Execution complete: askQuestion");
       return answer;
     } catch (error) {
-      console.log(error);
-      console.log("error while executing askQuestion");
+      console.error(error);
 
-      throw error
+      throw error;
     }
   }
 }
