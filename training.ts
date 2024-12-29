@@ -1,7 +1,5 @@
 import * as path from 'path';
-import DocumentLoader from './helper/document-loader';
-import redisVectorDb from './llm/vector_db/redis-vector-db';
-import mongoVectorDb from './llm/vector_db/mongo-vector-db';
+import DocumentLoader from './knowledge_base/constant/document-loader';
 
 
 export const trainnDocument = async () => {

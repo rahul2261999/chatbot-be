@@ -2,7 +2,7 @@ import { VectorStoreRetriever } from "@langchain/core/vectorstores"
 import mongoVectorDb from "../vector_db/mongo-vector-db"
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb"
 import { RunnableSequence, RunnableWithMessageHistory } from "@langchain/core/runnables";
-import DocumentLoader from "../../helper/document-loader";
+import DocumentLoader from "../../knowledge_base/constant/document-loader";
 import { ChatPromptTemplate, MessagesPlaceholder } from '@langchain/core/prompts'
 import chatMistralAIModel from "../ai_models/mistral";
 import { StringOutputParser } from "@langchain/core/output_parsers";

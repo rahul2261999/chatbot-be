@@ -1,4 +1,6 @@
 import {PDFLoader} from '@langchain/community/document_loaders/fs/pdf'
+import {DocxLoader} from '@langchain/community/document_loaders/fs/docx'
+
 import { Document } from '@langchain/core/documents';
 class DocumentLoader {
   public static async loadPdfDocument(filePath: string) {
@@ -10,11 +12,29 @@ class DocumentLoader {
 
       console.info("exection complete -> loadPdfDocument");
 
-      return docs[0];
+      return docs;
     } catch (error) {
       console.error(error);
 
       throw new Error("Failed to load PDF document");
+    }
+  }
+
+  public static async loadDocxDocument(filePath: string) {
+    try {
+      console.info("executing -> loadDocxDocument")
+
+      const loader = new DocxLoader(filePath);
+      const data = await loader.load();
+
+      console.info("exection complete -> loadDocxDocument");
+
+      return data;
+    } catch (error) {
+      console.error(error);
+      console.error("Execution failed -> loadDocxDocument");
+
+      throw new Error("Some");
     }
   }
 
