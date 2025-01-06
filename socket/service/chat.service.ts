@@ -1,4 +1,5 @@
-import { UserMessage } from "../../types/service/chat.interface";
+import chat_completionService from "../../langflow/chat_completion/chat_completion.service";
+import { UserMessage } from "./chat.type";
 import { ISocket, SocketEmitEvent } from "../socket.interface";
 
 class Chat {
@@ -18,9 +19,9 @@ class Chat {
   public async userMessage(data: UserMessage, socket: ISocket) {
     try {
       console.log("executing userMessage");
-      // const answer = "hello from the server";
-      
-      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, '');
+      const answer = await chat_completionService.main(data.message);
+      console.log(JSON.stringify(answer))
+      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, answer);
 
       console.log("executed userMessage");
     } catch (error) {

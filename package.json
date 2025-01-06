@@ -12,7 +12,6 @@
     "dev": "npm run prebuild && npm run build && npm run watch",
     "watch:cli": "tsc-watch --noClear --onSuccess \"node build/terminal.js interactive\"",
     "dev:cli": "npm run prebuild && npm run build && npm run watch:cli",
-
     "uat": "npm run prebuild && npm run build && npm run watch"
   },
   "author": "Rahul Saini",
