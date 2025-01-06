@@ -1,4 +1,3 @@
-import rag from "../../llm/rag/rag";
 import { UserMessage } from "../../types/service/chat.interface";
 import { ISocket, SocketEmitEvent } from "../socket.interface";
 
@@ -19,10 +18,9 @@ class Chat {
   public async userMessage(data: UserMessage, socket: ISocket) {
     try {
       console.log("executing userMessage");
-      const answer = await rag.askQuestion(data.message);
       // const answer = "hello from the server";
       
-      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, { answer });
+      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, '');
 
       console.log("executed userMessage");
     } catch (error) {
