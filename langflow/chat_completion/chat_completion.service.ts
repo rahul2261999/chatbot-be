@@ -75,7 +75,7 @@ class ChatCompletion {
               heading: "Oops!",
               subheading: "",
               paragraph: "somethings went wrong",
-              list: []
+              list: null
             }
           ]
         }

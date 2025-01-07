@@ -1,4 +1,4 @@
-export interface LangflowSession {
+export interface SessionInfo {
   sessionId: string;
 }
 
@@ -16,10 +16,10 @@ export interface ChatCompletionMessage {
   heading: string;
   subheading: string;
   paragraph: string;
-  list: IList[]
+  list: IList | null;
 }
 
 export interface IChatCompletionResponse {
-  sessionInfo: LangflowSession;
+  sessionInfo: SessionInfo;
   message: ChatCompletionMessage[]
 }

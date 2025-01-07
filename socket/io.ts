@@ -59,6 +59,7 @@ class Io {
       const token = socket.handshake.auth['token']
         || socket.handshake.headers['token'];
 
+      const userId = socket.handshake.auth['userId']
 
       if (!token) {
         console.error('access token not found');
@@ -73,7 +74,7 @@ class Io {
       }
 
       socket.configuration = {
-        userId: token
+        userId
       };
 
       next();
