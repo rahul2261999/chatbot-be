@@ -21,6 +21,5 @@ export interface ISocket extends Socket {
 }
 
 export interface UserMessageSent {
-  email: string
   message: string
 }

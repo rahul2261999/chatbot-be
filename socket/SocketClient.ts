@@ -17,11 +17,12 @@ class SocketClient {
   }
 
   private bindEvents() {
-    this.socket.on(SocketRecieverEvent.JOIN_ROOM, ({email}: {email: string}) => {
-      this.socket.join(`room_${email}`)
-      console.log(`User ${this.socket.configuration.userId} joined room`)
+    this.socket.on(SocketRecieverEvent.JOIN_ROOM, () => {
+      const userId = this.socket.configuration.userId
+      this.socket.join(userId)
+      console.log(`User ${userId} joined room`)
 
-      this.socket.emit(SocketEmitEvent.USER_JOINED, `User with email ${email} joined`)
+      this.socket.emit(SocketEmitEvent.USER_JOINED, `User with id ${userId} joined`)
     })
 
     this.socket.on(SocketRecieverEvent.LEAVE_ROOM, () => {
@@ -32,7 +33,7 @@ class SocketClient {
       console.log("User message sent")
       chatService.userMessage(
         {
-          userId: data.email,
+          userId: this.socket.configuration.userId,
           message: data.message,
         },
         this.socket

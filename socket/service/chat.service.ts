@@ -1,7 +1,6 @@
 import chat_completionService from "../../langflow/chat_completion/chat_completion.service";
 import { UserMessage } from "./chat.type";
 import { ISocket, SocketEmitEvent } from "../socket.interface";
-import axios from "axios";
 
 class Chat {
   private static instance: Chat;
@@ -19,17 +18,20 @@ class Chat {
 
   public async userMessage({userId, message}: UserMessage, socket: ISocket) {
     try {
-      console.log("executing userMessage");
+      console.log("executing userMessage", userId);
+
       const answer = await chat_completionService.main(message);
       console.log(JSON.stringify(answer))
-      socket.to(userId).emit(SocketEmitEvent.AI_MESSAGE_SENT, answer);
 
-      console.log("executed userMessage");
+      socket.join(userId)
+      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, answer);
+
+      console.log("executed userMessage", userId);
     } catch (error) {
       console.log("Failes to execute userMessage");
       console.log(error);
-
-      throw new Error("something went wrong");
+      socket.join(userId)
+      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, {errorMessage: (error as any).message});
     }
   }
 

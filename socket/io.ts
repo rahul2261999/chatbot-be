@@ -65,12 +65,13 @@ class Io {
         throw new Error('access token not found');
       }
 
+      // We want to allow every user, token is needed to uniquely identify a user session
 
-      if (token && token !== constant.socket.authKey) {
-        console.error("unauthorized access token");
+      // if (token && token !== constant.socket.authKey) {
+      //   console.error("unauthorized access token");
 
-        throw new Error("unauthorized access token")
-      }
+      //   throw new Error("unauthorized access token")
+      // }
 
       socket.configuration = {
         userId: token
