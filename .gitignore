@@ -4,3 +4,6 @@ build
 training_data
 .env
 .vercel
+social_media_data.json
+/helper/social_post_gen.ts
+launch.json

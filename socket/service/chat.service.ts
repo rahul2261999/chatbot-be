@@ -1,5 +1,5 @@
-import rag from "../../llm/rag/rag";
-import { UserMessage } from "../../types/service/chat.interface";
+import chat_completionService from "../../langflow/chat_completion/chat_completion.service";
+import { UserMessage } from "./chat.type";
 import { ISocket, SocketEmitEvent } from "../socket.interface";
 import axios from "axios";
 
@@ -20,20 +20,9 @@ class Chat {
   public async userMessage({userId, message}: UserMessage, socket: ISocket) {
     try {
       console.log("executing userMessage");
-      
-      // const answer = await rag.askQuestion(data.message);
-      // const answer = "hello from the server";
-
-      // Example: Call external API with user query
-      const response = await axios.get(`https://api.example.com/search?q=${message}`);
-      const dataStream = response.data;
-
-      // Stream output in chunks
-      for (const chunk of dataStream.chunks) {
-        socket.to(userId).emit(SocketEmitEvent.AI_MESSAGE_CHUNK, chunk);
-      }
-      
-      socket.to(userId).emit(SocketEmitEvent.AI_MESSAGE_SENT, 'Streaming complete');
+      const answer = await chat_completionService.main(message);
+      console.log(JSON.stringify(answer))
+      socket.to(userId).emit(SocketEmitEvent.AI_MESSAGE_SENT, answer);
 
       console.log("executed userMessage");
     } catch (error) {

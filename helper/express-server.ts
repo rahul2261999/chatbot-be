@@ -3,7 +3,6 @@ import * as express from 'express';
 import * as http from 'http';
 import * as cors from 'cors'
 import Io from '../socket/io';
-import rag from '../llm/rag/rag';
 import constant from '../constants/constant';
 
 class ExpressServer {
@@ -44,13 +43,6 @@ class ExpressServer {
   public async init() {
     this.httpServer.listen(this.port, async () => {
       console.info(`Server is running on port ${this.port}`);
-      // const answer = await rag.askQuestion("the me about the Psoriasis?")
-      // console.log(answer);
-
-      // const answer2 = await rag.askQuestion("the me about the disease?")
-      // console.log(answer2);
-
-      // trainnDocument()
     });
   }
 

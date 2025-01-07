@@ -2,7 +2,6 @@ import { Socket } from "socket.io";
 
 export enum SocketEmitEvent {
   'AI_MESSAGE_SENT' = 'AI_MESSAGE_SENT',
-  'AI_MESSAGE_CHUNK' = 'AI_MESSAGE_CHUNK',
   'USER_JOINED' = 'USER_JOINED',
   'USER_LEFT' = 'USER_LEFT',
 }
