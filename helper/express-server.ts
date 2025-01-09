@@ -45,6 +45,7 @@ class ExpressServer {
       console.info(`Server is running on port ${this.port}`);
     });
     this.app.use('/health', (req,res)=>{
+      console.log("sever health is good........");
       res.type('html') 
       res.send('<h4>I am completely healthy!!</h4>')
     })
