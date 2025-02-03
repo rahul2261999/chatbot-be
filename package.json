@@ -17,6 +17,7 @@
   "author": "Rahul Saini",
   "license": "ISC",
   "dependencies": {
+    "@langchain/anthropic": "^0.3.12",
     "@langchain/community": "^0.3.18",
     "@langchain/core": "^0.3.23",
     "@langchain/langgraph": "^0.2.20",
@@ -28,15 +29,19 @@
     "express": "^4.21.2",
     "inquirer": "^12.2.0",
     "langchain": "^0.3.5",
-    "mongodb": "^6.12.0",
+    "lodash": "^4.17.21",
+    "mongodb": "^6.13.0",
     "pdf-parse": "^1.1.1",
     "redis": "^4.7.0",
     "socket.io": "^4.8.1",
     "typescript": "^5.7.2",
-    "uuid": "^11.0.3"
+    "uuid": "^11.0.3",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/lodash": "^4.17.14",
     "cors": "^2.8.5",
     "madge": "^8.0.0",
     "socket.io-logger": "^0.0.2",
