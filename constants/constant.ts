@@ -4,11 +4,17 @@ config();
 
 export default Object.freeze({
   app: {
-    port: Number(process.env.PORT) || 5008
+    port: Number(process.env.PORT) || 5009
   },
   llmModel: {
-    name: "mistral-small-latest",
-    apiKey: process.env.MISTRAL_API_KEY
+    mistral: {
+      modelName: "mistral-small-latest",
+      apiKey: process.env.MISTRAL_API_KEY
+    },
+    anthropic: {
+      apiKey: process.env.ANTHROPIC_API_KEY,
+      modelName: "Anthropic-7B"
+    }
   },
   redis: {
     url: process.env.REDIS_URL
@@ -20,13 +26,6 @@ export default Object.freeze({
   },
   socket: {
     authKey: process.env.SOCKET_AUTHORIZATION_KEY
-  },
-  langflow: {
-    chat_completion: {
-      flowIdName: '09950fc4-bc0e-466d-87d4-ac982d87d63d',
-      langflowId: '1ba113b1-39fb-4abf-9791-3e8d22e89265',
-      apiToken: process.env.LANGFLOW_API_TOKEN || '',
-    }
   },
   statusCodes: {
     OK: 200,

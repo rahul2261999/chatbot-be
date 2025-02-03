@@ -1,8 +1,11 @@
 import { VectorStoreRetriever } from "@langchain/core/vectorstores"
 
 export interface BaseGetRetriver {
-  k?: number,
-  filter?: Record<string, string> | object;
+  k?: number;
+  prefilter?: {
+    tenantId?: string;
+    documentId?: string;
+  };
 }
 
 export interface BaseVectorStore {

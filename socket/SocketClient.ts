@@ -1,5 +1,5 @@
 import { ISocket, SocketRecieverEvent, UserMessageSent } from "./socket.interface";
-import chatService from "./service/chat.service";
+import chatService from "./service/chat/chat.service";
 
 class SocketClient {
   public static instance: SocketClient;

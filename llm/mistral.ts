@@ -7,8 +7,8 @@ class MistralLlm {
 
   private constructor() {
     this.llmClient = new ChatMistralAI({
-      apiKey: constant.llmModel.apiKey,
-      model: constant.llmModel.name,
+      apiKey: constant.llmModel.mistral.apiKey,
+      model: constant.llmModel.mistral.modelName,
       maxRetries: 3,
     })
   }

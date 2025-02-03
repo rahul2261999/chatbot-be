@@ -18,8 +18,7 @@ class CustomRunnableChain {
           loggerService.info({ ...loggerData, message: 'executing' });
 
           const retriver = mongoVectorStore.getRetriver(filter)
-
-          const documents = await retriver.invoke(question)
+          const documents = await retriver.invoke(question);
 
           loggerService.info({ ...loggerData, message: 'execution complete' });
           return { documents };

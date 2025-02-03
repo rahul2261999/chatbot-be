@@ -29,10 +29,12 @@ class MongoVectorStore implements BaseVectorStore {
   }
 
   public getRetriver(params?: BaseGetRetriver) {
-    const kfileds: number | undefined = params?.k || undefined;
-    const filter = params?.filter || {};
-    
-    return this.vectorStore.asRetriever(kfileds, filter)
+    return this.vectorStore.asRetriever({
+      k: 3,
+      filter: {
+        preFilter: params?.prefilter || {}
+      }
+    })
   }
 }
 

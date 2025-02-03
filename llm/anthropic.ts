@@ -7,8 +7,8 @@ class AnthropicLlm {
 
   private constructor() {
     this.llmClient = new ChatAnthropic({
-      apiKey: constant.llmModel.apiKey,
-      model: constant.llmModel.name,
+      apiKey: constant.llmModel.anthropic.apiKey,
+      model: constant.llmModel.anthropic.modelName,
       maxRetries: 3,
     })
   }

@@ -4,6 +4,7 @@ import * as http from 'http';
 import * as cors from 'cors'
 import Io from '../socket/io';
 import constant from '../constants/constant';
+import loggerService from '../utils/logger/logger.service';
 
 class ExpressServer {
   private static instance: ExpressServer;
@@ -42,7 +43,7 @@ class ExpressServer {
 
   public async init() {
     this.httpServer.listen(this.port, async () => {
-      console.info(`Server is running on port ${this.port}`);
+      loggerService.info(`Server is running on port ${this.port}`);
     });
   }
 

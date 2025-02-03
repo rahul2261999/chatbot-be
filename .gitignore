@@ -7,3 +7,4 @@ training_data
 social_media_data.json
 /helper/social_post_gen.ts
 launch.json
+logs
