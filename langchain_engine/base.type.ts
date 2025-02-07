@@ -19,7 +19,7 @@ export interface OrderedList extends BaseList {
 
 export interface UnorderedList extends BaseList {
   type: 'unordered';
-  listItem: number[];
+  listItem: string[];
 }
 
 type List = OrderedList | UnorderedList;

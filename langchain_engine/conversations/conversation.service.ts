@@ -2,10 +2,11 @@ import { RunnableSequence } from '@langchain/core/runnables'
 import { PromptTemplate } from '@langchain/core/prompts'
 import mistral from '../../llm/mistral';
 import { ChatMistralAI } from '@langchain/mistralai';
-import { StringOutputParser } from '@langchain/core/output_parsers';
+import { JsonOutputParser, StringOutputParser } from '@langchain/core/output_parsers';
 import loggerService from '../../utils/logger/logger.service';
 import { CustomRunnableChain } from '../runnables/custom-runnables-chain';
 import InternalServer from '../../utils/error/internal_server.error';
+import { ChatResponse } from '../base.type';
 class Conversation {
   private static instance: Conversation;
   private llmClient: ChatMistralAI;
@@ -38,7 +39,7 @@ class Conversation {
       
       Question: "{question}"
       `);
-        
+
       const enhanceQuestionChain = RunnableSequence.from([
         retrivalPrompt,
         this.llmClient,
@@ -49,26 +50,40 @@ class Conversation {
 
       loggerService.debug({ ...loggerData, message: `enhancedQuestion: ${enhancedQuestion}` });
 
-      const documentRetrivalChain = CustomRunnableChain.vectorRetrivalChain({
-        prefilter: {
-          tenantId: 'tenant-2',
-        }
-      });
-
+      const documentRetrivalChain = CustomRunnableChain.vectorRetrivalChain();
+  
       const answerPromtTemplate = PromptTemplate.fromTemplate(`
-        You are an expert AI assistant with deep knowledge. Your task is to answer the following question using the provided context. Ensure your response is accurate, concise, and directly relevant to the query. If the context lacks sufficient details, provide a well-reasoned response based on best practices or general knowledge while clearly stating any assumptions. Avoid speculation or fabricated information."
-        question: {question}
-        context: {context}
+        Given the context below, answer the question strictly based on the provided information. Ensure the response is well-structured and does not include any external knowledge. If the context does not contain sufficient information, respond with a brief message such as: 'I'm unable to find the answer based on the given information. Could you please clarify your question?'
 
-        return only the anser, do not add any additional information.
+        Question: "{question}"
+        Context: {context}
+        ### **Response Format:**
+        [
+        {{ "type": "h1", "text": "Main Title" }},
+        {{ "type": "paragraph", "text": "This is a paragraph with details." }},
+        {{ "type": "ordered", "listItem": ["First item", "Second item"] }},
+        {{ "type": "unordered", "listItem": ["Bullet point 1", "Bullet point 2"] }},
+        {{ "type": "hyperlink", "url": "https://example.com", "aliasText": "Click here" }}
+        ]
+
+        ### **Instructions:**
+        - **Return only JSON**, no extra text or explanations.
+        - Headings must be one of **h1, h2, h3, h4, h5, h6**.
+        - Use **"type": "paragraph"** for text content.
+        - Use **"type": "ordered"** or **"type": "unordered"** for lists.
+        - Use **"type": "hyperlink"** for links, formatted as:  
+        **"type": "hyperlink", "url": "...", "aliasText": "..."**.
+      
       `)
+
+      const jsonParser = new JsonOutputParser<ChatResponse>()
 
       const answerGeneartionChain = RunnableSequence.from([
         documentRetrivalChain,
         ({ context }) => { return { question: message, context } },
         answerPromtTemplate,
         this.llmClient,
-        new StringOutputParser()
+        jsonParser,
       ])
 
       const answer = await answerGeneartionChain.invoke(enhancedQuestion);
