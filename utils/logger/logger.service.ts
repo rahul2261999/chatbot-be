@@ -62,6 +62,19 @@ class LoggingService implements ILoggerServiceMethods {
     this.loggerClient.info(formmatedMessage);
   }
 
+  public notice(message: ILoggerData | string): void {
+    const tracingId = this.getTracingId();
+    let formmatedMessage: string = tracingId ? `tracingId: ${this.getTracingId()} --> `: '';
+
+    if (typeof message !== 'string') {
+      formmatedMessage += this.formatter(message);
+    } else {
+      formmatedMessage += message
+    }
+
+    this.loggerClient.notice(formmatedMessage);
+  }
+
   public debug(message: ILoggerData | string): void {
     const tracingId = this.getTracingId();
     let formmatedMessage: string = tracingId ? `tracingId: ${this.getTracingId()} --> `: '';
@@ -75,7 +88,7 @@ class LoggingService implements ILoggerServiceMethods {
     this.loggerClient.debug(formmatedMessage);
   }
 
-  public warn(message: ILoggerData | string | null, option?: { error?: Error; }): void {
+  public warn(message: ILoggerData | string | null, option?: { error?: any; }): void {
     const tracingId = this.getTracingId();
     let formmatedMessage: string = tracingId ? `tracingId: ${this.getTracingId()} --> `: '';
 
@@ -91,8 +104,9 @@ class LoggingService implements ILoggerServiceMethods {
     this.loggerClient.warn(formmatedMessage, option?.error);
   }
 
-  public error(message: ILoggerData | string | null, option?: { error?: Error; }): void {
-    let formmatedMessage: string = `tracingId: ${this.getTracingId()} --> `;
+  public error(message: ILoggerData | string | null, option?: { error?: any; }): void {
+    const tracingId = this.getTracingId();
+    let formmatedMessage: string = tracingId ? `tracingId: ${this.getTracingId()} --> `: '';
 
     if (message !== null) {
       if (typeof message !== 'string') {
@@ -104,6 +118,22 @@ class LoggingService implements ILoggerServiceMethods {
 
     this.loggerClient.error(formmatedMessage, option?.error);
   }
+
+  public alert(message: ILoggerData | string | null, option?: { error?: any; }): void {
+    const tracingId = this.getTracingId();
+    let formmatedMessage: string = tracingId ? `tracingId: ${this.getTracingId()} --> `: '';
+
+    if (message !== null) {
+      if (typeof message !== 'string') {
+        formmatedMessage += this.formatter(message);
+      } else {
+        formmatedMessage = message
+      }
+    }
+
+    this.loggerClient.alert(formmatedMessage, option?.error);
+  }
+
 }
 
 export default LoggingService.getInstance(winstonService)

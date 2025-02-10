@@ -50,10 +50,14 @@ class Conversation {
 
       loggerService.debug({ ...loggerData, message: `enhancedQuestion: ${enhancedQuestion}` });
 
-      const documentRetrivalChain = CustomRunnableChain.vectorRetrivalChain();
+      const documentRetrivalChain = CustomRunnableChain.vectorRetrivalChain({
+        prefilter: {
+          tenantId: 'tenant-1'
+        }
+      });
   
       const answerPromtTemplate = PromptTemplate.fromTemplate(`
-        Given the context below, answer the question strictly based on the provided information. Ensure the response is well-structured and does not include any external knowledge. If the context does not contain sufficient information, respond with a brief message such as: 'I'm unable to find the answer based on the given information. Could you please clarify your question?'
+        Given the context below, answer the question strictly based on the provided information. Ensure the response is well-structured json and does not include any external knowledge. If the context does not contain sufficient information, respond with a brief message such as: 'I'm unable to find the answer based on the given information. Could you please clarify your question?'
 
         Question: "{question}"
         Context: {context}

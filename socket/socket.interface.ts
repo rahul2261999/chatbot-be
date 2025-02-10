@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 
 export enum SocketEmitEvent {
-  'AI_MESSAGE_SENT' = 'AI_MESSAGE_SENT',
+  'AI_AGENT_MESSAGE' = 'AI_AGENT_MESSAGE',
   'USER_JOINED' = 'USER_JOINED',
   'USER_LEFT' = 'USER_LEFT',
 }
@@ -9,7 +9,7 @@ export enum SocketEmitEvent {
 export enum SocketRecieverEvent {
   'JOIN_ROOM' = 'JOIN_ROOM',
   'LEAVE_ROOM' = 'LEAVE_ROOM',
-  'USER_MESSAGE_SENT' = 'USER_MESSAGE_SENT',
+  'USER_MESSAGE' = 'USER_MESSAGE',
 }
 
 export interface SocketConfiguration {

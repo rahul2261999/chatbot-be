@@ -30,7 +30,7 @@ export interface Hyperlink {
   aliasText?: string,
 }
 
-export type ChatResponseItem = Heading | List | Hyperlink;
+export type ChatResponseItem = Heading | List | Hyperlink | Paragraph;
 export type ChatResponse = ChatResponseItem[];
 
 

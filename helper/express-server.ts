@@ -19,7 +19,7 @@ class ExpressServer {
     this.io = Io.init(this.httpServer);
     this.initilizeMiddleware();
   }
-  
+
   public static getInstance(): ExpressServer {
     if (!ExpressServer.instance) {
       ExpressServer.instance = new ExpressServer();
@@ -30,14 +30,14 @@ class ExpressServer {
 
   private initilizeMiddleware() {
     try {
-      console.info("executing middleware");
-      
+      loggerService.info("executing middleware");
+
       this.app.use(cors());
       this.app.use(express.json({}))
 
-      console.info("execution completed -> middleware")
+      loggerService.info("execution completed -> middleware")
     } catch (error) {
-      console.error(error);
+      loggerService.error(null, { error });
     }
   }
 

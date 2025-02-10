@@ -16,12 +16,14 @@ class WinstonService implements ILoggerClientMethods {
   private constructor() {
     this.winston = Winston.createLogger({
       levels: {
-        'error': 0,
-        'info': 1,
-        'debug': 2,
-        'warn': 3,
+        error: 0,
+        alert: 1,
+        warn: 2,
+        info: 3,
+        notice: 4,
+        debug: 5,
       },
-      level: 'warn',
+      level: 'debug',
       format: Winston.format.combine(
         Winston.format.timestamp({
           format: 'DD-MM-YYYY HH:mm:ss',
@@ -44,19 +46,34 @@ class WinstonService implements ILoggerClientMethods {
         })
       ],
     })
+    Winston.addColors({
+      error: "red bold",
+      alert: "magenta bold",
+      warn: "yellow bold",
+      info: "green",
+      notice: "white bold",
+      debug: "blue",
+    })
   }
+
 
   public info(...args: any[]): void {
     args.forEach(args => this.winston.info(args))
   }
+  public notice(...args: any[]): void {
+    args.forEach(args => this.winston.notice(args))
+  }
   public debug(...args: any[]): void {
     args.forEach(args => this.winston.debug(args))
   }
-  public warn(...args: any[]): void {
-    args.forEach(args => this.winston.warn(args))
-  }
   public error(...args: any[]): void {
-    args.forEach(args => args && this.winston.error(args))
+    args.forEach(args => args && this.winston.error(args, args?.stack))
+  }
+  public alert(...args: any[]): void {
+    args.forEach(args => args && this.winston.alert(args, args?.stack))
+  }
+  public warn(...args: any[]): void {
+    args.forEach(args => args && this.winston.warn(args))
   }
 
 }

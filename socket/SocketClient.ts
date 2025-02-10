@@ -1,5 +1,6 @@
 import { ISocket, SocketRecieverEvent, UserMessageSent } from "./socket.interface";
 import chatService from "./service/chat/chat.service";
+import loggerService from "../utils/logger/logger.service";
 
 class SocketClient {
   public static instance: SocketClient;
@@ -18,22 +19,26 @@ class SocketClient {
 
   private bindEvents() {
     this.socket.on(SocketRecieverEvent.JOIN_ROOM, () => {
-      console.log(`User ${this.socket.configuration.userId} joined room`)
+      loggerService.debug(`User ${this.socket.configuration.userId} joined room`)
     })
 
     this.socket.on(SocketRecieverEvent.LEAVE_ROOM, () => {
-      console.log(`User ${this.socket.configuration.userId} leave`)
+      loggerService.debug(`User ${this.socket.configuration.userId} leave`)
     });
 
-    this.socket.on(SocketRecieverEvent.USER_MESSAGE_SENT, async (data: UserMessageSent) => {
-      console.log("User message sent")
-      chatService.userMessage(
-        {
-          userId: this.socket.configuration.userId,
-          message: data.message,
-        },
-        this.socket
-      )
+    this.socket.on(SocketRecieverEvent.USER_MESSAGE, async (data: UserMessageSent) => {
+      try {
+        await chatService.userMessage(
+          {
+            userId: '',
+            message: data.message,
+          },
+          this.socket
+        )
+      } catch (error) {
+        loggerService.error("Failed to send user message")
+        loggerService.error(null, { error })
+      }
     });
   }
 }

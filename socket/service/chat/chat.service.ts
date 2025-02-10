@@ -1,5 +1,7 @@
-import { UserMessage } from "./chat.type";
+import { IAgentMessagePayload, UserMessage } from "./chat.type";
 import { ISocket, SocketEmitEvent } from "../../socket.interface";
+import conversationService from "../../../langchain_engine/conversations/conversation.service";
+import loggerService from "../../../utils/logger/logger.service";
 
 class Chat {
   private static instance: Chat;
@@ -17,15 +19,22 @@ class Chat {
 
   public async userMessage(data: UserMessage, socket: ISocket) {
     try {
-      console.log("executing userMessage");
-      const answer = {};
-      console.log(JSON.stringify(answer))
-      socket.emit(SocketEmitEvent.AI_MESSAGE_SENT, answer);
+      loggerService.info("executing userMessage");
 
-      console.log("executed userMessage");
+      const answer = await conversationService.answer(data.message);
+
+      loggerService.debug(JSON.stringify(answer));
+
+      const res: IAgentMessagePayload = {
+        conversationId: '',
+        chatResponse: answer,
+      }
+      socket.emit(SocketEmitEvent.AI_AGENT_MESSAGE, res);
+
+      loggerService.info("executed userMessage");
     } catch (error) {
-      console.log("Failes to execute userMessage");
-      console.log(error);
+      loggerService.error("Failes to execute userMessage");
+      loggerService.error(null, { error });
 
       throw new Error("something went wrong");
     }

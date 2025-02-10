@@ -3,6 +3,8 @@ import SocketClient from "./SocketClient";
 import { NextFunction } from "express";
 import { ISocket } from "./socket.interface";
 import constant from "../constants/constant";
+import loggerService from "../utils/logger/logger.service";
+import { asyncContextStore } from "../utils/helper/async_context_store.util";
 
 class Io {
   private static instance: Io;
@@ -36,7 +38,7 @@ class Io {
 
   private bindEvent() {
     this.io.on("connection", (socket) => {
-      console.log("socket connected");
+      loggerService.info("socket connected");
 
       SocketClient.bindSocket(socket as ISocket);
     });
@@ -44,11 +46,16 @@ class Io {
 
   private initializeMiddlewares() {
     try {
+      this.io.use((socket, next) => {
+        asyncContextStore.runContext({}, () => {
+          asyncContextStore.setTraceId();
+          next();
+        })
+      })
       // this.io.use(socketLogger);
       // @ts-ignore
-      this.io.use(this.authorizationMiddleware);
+      // this.io.use(this.authorizationMiddleware);
     } catch (error) {
-
       throw error;
     }
   }
@@ -61,13 +68,13 @@ class Io {
 
 
       if (!token) {
-        console.error('access token not found');
+        loggerService.error('access token not found');
         throw new Error('access token not found');
       }
 
 
       if (token && token !== constant.socket.authKey) {
-        console.error("unauthorized access token");
+        loggerService.error("unauthorized access token");
 
         throw new Error("unauthorized access token")
       }
