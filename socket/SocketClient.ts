@@ -1,4 +1,4 @@
-import { ISocket, SocketRecieverEvent, UserMessageSent } from "./socket.interface";
+import { ISocket, SocketEmitEvent, SocketRecieverEvent, UserMessageSent } from "./socket.interface";
 import chatService from "./service/chat.service";
 
 class SocketClient {
@@ -18,7 +18,11 @@ class SocketClient {
 
   private bindEvents() {
     this.socket.on(SocketRecieverEvent.JOIN_ROOM, () => {
-      console.log(`User ${this.socket.configuration.userId} joined room`)
+      const userId = this.socket.configuration.userId
+      this.socket.join(userId)
+      console.log(`User ${userId} joined room`)
+
+      this.socket.emit(SocketEmitEvent.USER_JOINED, `User with id ${userId} joined`)
     })
 
     this.socket.on(SocketRecieverEvent.LEAVE_ROOM, () => {
